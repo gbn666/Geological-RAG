@@ -1,0 +1,8 @@
+torchvision>=0.21.0
+timm>=1.0.15
+torch>=2.6.0
+transformers>=4.49.0
+pillow>=11.1.0
+requests==2.32.3
+langchain==0.3.20
+neo4j==5.28.1

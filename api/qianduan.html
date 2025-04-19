@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>问答机器人</title>
+  <style>
+    /* 设置全局字体为常见的无衬线字体 */
+    body {
+      font-family: "Microsoft YaHei", "微软雅黑", Arial, sans-serif;
+      margin: 20px;
+    }
+    input, button, textarea {
+      margin: 10px 0;
+      font-size: 16px;
+      padding: 5px;
+    }
+    #answer {
+      white-space: pre-wrap;
+      border: 1px solid #ccc;
+      padding: 10px;
+      font-size: 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>问答机器人</h1>
+
+  <input type="text" id="question" placeholder="请输入你的问题">
+  <button onclick="ask()">提问</button>
+  <p id="answer"></p>
+
+  <script>
+    async function ask() {
+      const question = document.getElementById("question").value;
+      const response = await fetch("http://localhost:8000/ask", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+      });
+      const data = await response.json();
+      document.getElementById("answer").innerText = data.answer;
+    }
+  </script>
+</body>
+</html>

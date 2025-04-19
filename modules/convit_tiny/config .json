@@ -1,0 +1,33 @@
+{
+  "architecture": "convit_tiny",
+  "num_classes": 1000,
+  "num_features": 192,
+  "global_pool": "token",
+  "pretrained_cfg": {
+    "tag": "fb_in1k",
+    "custom_load": false,
+    "input_size": [
+      3,
+      224,
+      224
+    ],
+    "fixed_input_size": true,
+    "interpolation": "bicubic",
+    "crop_pct": 0.875,
+    "crop_mode": "center",
+    "mean": [
+      0.485,
+      0.456,
+      0.406
+    ],
+    "std": [
+      0.229,
+      0.224,
+      0.225
+    ],
+    "num_classes": 1000,
+    "pool_size": null,
+    "first_conv": "patch_embed.proj",
+    "classifier": "head"
+  }
+}
