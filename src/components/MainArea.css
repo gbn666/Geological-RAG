@@ -1,0 +1,11 @@
+/* src/components/MainArea.css */
+
+.main-area {
+  flex: 1;
+  background-color: #fff; /* 或者你想要的其他颜色 */
+  height: 100vh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+}

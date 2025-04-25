@@ -1,0 +1,63 @@
+/* src/components/ChatInput.css */
+
+.chat-input {
+    display: flex;
+    align-items: center;
+    background-color: #f7f7f7;
+    border-radius: 8px;
+    padding: 12px;
+  }
+  
+  .chat-input-textarea {
+    flex: 1;
+    resize: none;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    font-size: 14px;
+    height: 40px; /* 你可以根据需要调整 */
+    margin-right: 8px;
+  }
+  
+  /* 上传文件按钮 */
+  .attach-btn {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #eaeaea;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .attach-btn img {
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+  }
+  
+  .attach-btn:hover {
+    background-color: #f5ebe1;
+  }
+  
+  /* 发送按钮 */
+  .send-btn {
+    background-color: #fdbc40; /* 你想让按钮更明显也可以改个色 */
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+  }
+  
+  .send-btn img {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .send-btn:hover {
+    background-color: #faa732;
+  }
+  

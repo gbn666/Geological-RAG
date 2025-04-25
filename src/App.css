@@ -1,0 +1,10 @@
+/* src/App.css */
+
+.app-container {
+  display: flex;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif; /* 你可以换成自己想用的字体 */
+}
