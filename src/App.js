@@ -1,9 +1,8 @@
-// src/App.js
-
+//APP.JS
 import React from "react";
 import Sidebar from "./components/Sidebar";
 import MainArea from "./components/MainArea";
-import "./App.css"; // 这里放一些全局样式
+import "./App.css";
 
 function App() {
   return (

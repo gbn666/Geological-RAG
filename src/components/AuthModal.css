@@ -1,0 +1,136 @@
+/* src/components/AuthModal.css */
+.auth-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000; /* 确保模态框在最上层 */
+  }
+  
+  .auth-modal {
+    background-color: white;
+    border-radius: 8px;
+    width: 360px;
+    max-width: 90%; /* 适配小屏幕 */
+    padding: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .auth-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .auth-header h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #999;
+  }
+  
+  .auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px; /* 表单元素之间的间距 */
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  
+  .form-group label {
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .form-group input {
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 100%;
+    box-sizing: border-box;
+    /* 当输入框获取焦点时的样式 */
+    outline: none;
+  }
+  
+  /* 修改输入框获取焦点时的边框颜色 */
+  .form-group input:focus {
+    border-color: #fef9f4; /* 输入框获取焦点时的边框颜色 */
+    box-shadow: 0 0 0 2px #fef9f440; /* 添加轻微的阴影效果，使颜色更加明显 */
+  }
+  
+  .verification-code-btn {
+    padding: 12px;
+    background-color: #F4E5CF; /* 黄色按钮 */
+    color: #333; /* 文字颜色设置为深灰色，以确保可读性 */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 500;
+  }
+  
+  .verification-code-btn:hover {
+    background-color: #BFA686; /* 悬浮时颜色稍微变深 */
+  }
+  
+  .submit-btn {
+    padding: 12px;
+    background-color: #F4E5CF; /* 黄色按钮 */
+    color: #333; /* 文字颜色设置为深灰色，以确保可读性 */
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    font-weight: 500;
+  }
+  
+  .submit-btn:hover {
+    background-color: #BFA686; /* 悬浮时颜色稍微变深 */
+  }
+  
+  .auth-toggle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .toggle-btn {
+    background: none;
+    border: none;
+    color: #000; /* 将注册的字体颜色改为深一点的黑色 */
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 4px;
+  }
+  
+  .toggle-btn:hover {
+    text-decoration: underline;
+  }
+  
+  .toggle-btn:disabled {
+    cursor: not-allowed;
+    color: #999; /* 禁用时的颜色 */
+  }

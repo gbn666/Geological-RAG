@@ -1,11 +1,28 @@
-/* src/components/MainArea.css */
-
-.main-area {
-  flex: 1;
-  background-color: #fff; /* 或者你想要的其他颜色 */
-  height: 100vh;
-  box-sizing: border-box;
+/*MainArea.css*/
+.header-intro {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  padding: 24px;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.intro-box {
+  display: flex;
+  align-items: center;
+}
+
+.rock-icon {
+  width: 100px;
+  height: 100px;
+  margin-right: 16px;
+}
+
+.chat-input {
+  display: flex;
+  flex-direction: column; /* 垂直排列子元素 */
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px;
+  gap: 16px; /* 增加按钮之间的间距 */
+  width: 800px; /* 设置宽度为800px，与截图一致 */
 }

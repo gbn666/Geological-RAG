@@ -1,63 +1,51 @@
-/* src/components/ChatInput.css */
-
+/*ChatInput.css*/
 .chat-input {
-    display: flex;
-    align-items: center;
-    background-color: #f7f7f7;
-    border-radius: 8px;
-    padding: 12px;
-  }
-  
-  .chat-input-textarea {
-    flex: 1;
-    resize: none;
-    border: none;
-    outline: none;
-    background-color: transparent;
-    font-size: 14px;
-    height: 40px; /* 你可以根据需要调整 */
-    margin-right: 8px;
-  }
-  
-  /* 上传文件按钮 */
-  .attach-btn {
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    border: 1px solid #eaeaea;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-    margin-right: 8px;
-  }
-  
-  .attach-btn img {
-    width: 16px;
-    height: 16px;
-    margin-right: 4px;
-  }
-  
-  .attach-btn:hover {
-    background-color: #f5ebe1;
-  }
-  
-  /* 发送按钮 */
-  .send-btn {
-    background-color: #fdbc40; /* 你想让按钮更明显也可以改个色 */
-    border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-  }
-  
-  .send-btn img {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .send-btn:hover {
-    background-color: #faa732;
-  }
-  
+  display: flex;
+  flex-direction: column; /* 垂直排列子元素 */
+  background-color: #f7f7f7;
+  border-radius: 30px;/* 增加圆角 */
+  padding: 12px;
+  gap: 16px; /* 增加按钮之间的间距 */
+  width: 800px; /* 设置宽度为800px，与截图一致 */
+}
+
+
+.chat-input-textarea {
+  resize: none; /* 禁止调整大小 */
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 14px;
+  min-height: 100px; /* 最小高度设置为100px，可以显示多行文字 */
+  padding: 8px;
+  border-radius: 20px;
+  width: 100%; /* 输入框占满父容器宽度 */
+}
+
+.chat-buttons {
+  display: flex;
+  justify-content: space-between; /* 按钮两端对齐 */
+  width: 100%; /* 按钮容器占满父容器宽度 */
+}
+
+.attach-btn, .send-btn {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid #eaeaea;
+  border-radius: 20px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.attach-btn img, .send-btn img {
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+.attach-btn:hover, .send-btn:hover {
+  background-color: #f5ebe1;
+}

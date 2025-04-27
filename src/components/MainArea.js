@@ -1,5 +1,4 @@
-// src/components/MainArea.js
-
+//MainArea.js
 import React from "react";
 import "./MainArea.css";
 import HeaderIntro from "./HeaderIntro";

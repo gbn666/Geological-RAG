@@ -1,0 +1,19 @@
+/*HeaderIntro.css*/
+.header-intro {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 24px;
+  }
+  
+  .intro-box {
+    display: flex;
+    align-items: center;
+    max-width: 600px;
+  }
+  
+  .rock-icon {
+    width: 100px;
+    height: 100px;
+    margin-right: 16px;
+  }

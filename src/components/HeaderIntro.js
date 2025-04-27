@@ -1,7 +1,7 @@
-// src/components/HeaderIntro.js
-
+//HeaderIntro.js
 import React from "react";
-import rockIcon from "../assets/rock-icon.png"; // 你自己的头部图标(也可用SVG)
+import rockIcon from "../assets/rock-icon.png"; // 头部图标
+import "./HeaderIntro.css";
 
 export default function HeaderIntro() {
   return (
