@@ -1,5 +1,5 @@
 import os
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request
 from flask_jwt_extended import JWTManager
 from models import db
 from config import Config
@@ -13,13 +13,24 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
 
+    @app.after_request
+    def add_cors_headers(response):
+        if request.path.startswith("/api/"):
+            response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"
+            response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
+            response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
+        return response
     # 初始化各个扩展
     db.init_app(app)
     JWTManager(app)
     mail.init_app(app)  # —— 这里初始化 Flask-Mail
 
     # 跨域
-    CORS(app, origins=app.config.get("CORS_ORIGINS", "*"))
+    CORS(
+        app,
+        resources={r"/api/*": {"origins": "http://172.20.67.102:3000"}},
+        supports_credentials=False,
+    )
 
     # 确保上传目录存在
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
