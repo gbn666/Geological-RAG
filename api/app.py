@@ -14,6 +14,12 @@ def create_app():
     app.config.from_object(Config)
 
     @app.after_request
+    def set_security_headers(response):
+        # 防止浏览器 MIME 类型嗅探
+        response.headers['X-Content-Type-Options'] = 'nosniff'
+        return response
+
+    @app.after_request
     def add_cors_headers(response):
         if request.path.startswith("/api/"):
             response.headers["Access-Control-Allow-Origin"] = "http://localhost:3000"

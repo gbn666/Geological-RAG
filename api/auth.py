@@ -7,34 +7,52 @@ from flask_jwt_extended import (
     jwt_required,
     get_jwt_identity
 )
+from flask_jwt_extended.exceptions import JWTExtendedException, NoAuthorizationError
 from flask_cors import cross_origin
+from jwt import ExpiredSignatureError
 from werkzeug.security import generate_password_hash, check_password_hash
 
 from app import db, mail
 from models import User
 
+# Blueprint for auth routes
 auth_bp = Blueprint("auth", __name__, url_prefix="/api/auth")
 
-# 验证码存储，正式环境建议使用Redis
+# ===== 安全 Header：统一加到所有响应 =====
+@auth_bp.after_app_request
+def set_security_headers(response):
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    return response
+
+# ===== JWT 异常统一处理 =====
+@auth_bp.errorhandler(JWTExtendedException)
+def handle_jwt_error(e):
+    current_app.logger.error(f"JWT Error: {e}")
+    if isinstance(e, NoAuthorizationError):
+        return jsonify({"error": "未提供身份认证信息"}), 401
+    if isinstance(e, ExpiredSignatureError):
+        return jsonify({"error": "身份认证已过期，请重新登录"}), 401
+    return jsonify({"error": "身份认证失败，请重新登录"}), 401
+
+# ====== 内存临时验证码存储（Demo用，生产用Redis） ======
 verify_codes = {}
-# 忘记密码验证码存储
 reset_codes = {}
 
-
+# ====== 发送注册验证码 ======
 @auth_bp.route("/sendCode", methods=["POST"])
 @cross_origin()
 def send_code():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     email = data.get("email")
     if not email:
         return jsonify({"error": "缺少邮箱地址"}), 400
 
-    # 生成6位验证码
     code = random.randint(100000, 999999)
     expire_ts = time.time() + 300
     verify_codes[email] = {"code": code, "expire": expire_ts}
 
-    # 发送验证码邮件
     try:
         with mail.connect() as conn:
             msg = Message(
@@ -45,19 +63,20 @@ def send_code():
             )
             conn.send(msg)
     except Exception as e:
-        current_app.logger.error(f"注册验证码发送失败: {e}")
+        current_app.logger.error(f"验证码发送失败: {e}")
         return jsonify({"error": f"验证码发送失败，错误信息: {e}"}), 500
 
     return jsonify({"msg": f"验证码已发送至 {email}"}), 200
 
-
+# ====== 注册用户 ======
 @auth_bp.route("/register", methods=["POST"])
 @cross_origin()
 def register():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     for field in ("email", "password", "verificationCode"):
         if not data.get(field):
             return jsonify({"error": f"缺少字段 {field}"}), 400
+
     email = data["email"]
     password = data["password"]
     input_code = data["verificationCode"]
@@ -81,11 +100,11 @@ def register():
     db.session.commit()
     return jsonify({"msg": "注册成功"}), 201
 
-
+# ====== 登录用户 ======
 @auth_bp.route("/login", methods=["POST"])
 @cross_origin()
 def login():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     email = data.get("email")
     password = data.get("password")
     if not email or not password:
@@ -95,17 +114,17 @@ def login():
     if not user or not check_password_hash(user.password_hash, password):
         return jsonify({"error": "邮箱或密码错误"}), 401
 
-    token = create_access_token(identity=user.id)
+    token = create_access_token(identity=str(user.id))
     expires = current_app.config.get("JWT_ACCESS_TOKEN_EXPIRES")
     expires_in = expires.total_seconds() if expires else None
     return jsonify({"access_token": token, "expires_in": expires_in}), 200
 
-
+# ====== 修改密码（需要登录） ======
 @auth_bp.route("/changePassword", methods=["POST"])
 @jwt_required()
 @cross_origin()
 def change_password():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     current_pwd = data.get("currentPassword")
     new_pwd = data.get("newPassword")
     if not current_pwd or not new_pwd:
@@ -121,11 +140,11 @@ def change_password():
     db.session.commit()
     return jsonify({"msg": "密码修改成功"}), 200
 
-
+# ====== 忘记密码 - 发送重置验证码 ======
 @auth_bp.route("/forgotPassword/sendCode", methods=["POST"])
 @cross_origin()
 def forgot_send_code():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     email = data.get("email")
     if not email:
         return jsonify({"error": "缺少邮箱地址"}), 400
@@ -147,16 +166,16 @@ def forgot_send_code():
             )
             conn.send(msg)
     except Exception as e:
-        current_app.logger.error(f"重置验证码发送失败: {e}")
+        current_app.logger.error(f"密码重置验证码发送失败: {e}")
         return jsonify({"error": f"验证码发送失败，错误信息: {e}"}), 500
 
     return jsonify({"msg": f"重置验证码已发送至 {email}"}), 200
 
-
+# ====== 忘记密码 - 提交验证码重置密码 ======
 @auth_bp.route("/forgotPassword/reset", methods=["POST"])
 @cross_origin()
 def forgot_reset():
-    data = request.get_json() or {}
+    data = request.get_json(silent=True) or {}
     email = data.get("email")
     input_code = data.get("verificationCode")
     new_pwd = data.get("newPassword")
@@ -180,7 +199,7 @@ def forgot_reset():
     db.session.commit()
     return jsonify({"msg": "密码重置成功"}), 200
 
-
+# ====== 获取当前用户信息（需要登录） ======
 @auth_bp.route("/me", methods=["GET"])
 @jwt_required()
 @cross_origin()
