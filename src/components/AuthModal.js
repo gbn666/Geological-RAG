@@ -1,11 +1,10 @@
+//C:\Users\10177\rock-app\src\components\AuthModal.js
 import React, { useState } from "react";
 import "./AuthModal.css";
+import { login, register, sendVerificationCode } from "../api/api";
 
-// ✅【新增】引入封装好的接口
-import { login, register, sendVerificationCode } from "../api/api"; // <-- 这里后期如果路径变了，需要改
-
-export default function AuthModal({ isOpen, onClose }) {
-  const [isRegister, setIsRegister] = useState(false); // 初始为登录界面
+export default function AuthModal({ isOpen, onClose, onLogin }) {
+  const [isRegister, setIsRegister] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -14,11 +13,11 @@ export default function AuthModal({ isOpen, onClose }) {
   });
   const [isVerificationCodeSent, setIsVerificationCodeSent] = useState(false);
   const [sendingCode, setSendingCode] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(""); // 用于显示错误消息
+  const [errorMessage, setErrorMessage] = useState("");
 
-  // ✅【需要修改】处理表单提交，真正调用接口
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage("");
 
     if (isRegister && formData.password !== formData.confirmPassword) {
       setErrorMessage("两次输入的密码不一致！");
@@ -27,42 +26,48 @@ export default function AuthModal({ isOpen, onClose }) {
 
     try {
       if (isRegister) {
-        // ✅【新增】真正调用 register 接口
-        await register(formData.email, formData.password, formData.verificationCode);
+        await register(
+          formData.email,
+          formData.password,
+          formData.verificationCode
+        );
         alert("注册成功！");
       } else {
-        // ✅【新增】真正调用 login 接口
-        const response = await login(formData.email, formData.password);
-        if (response.data.access_token) {
-          localStorage.setItem("token", response.data.access_token); // 登录后保存 token
+        const { access_token } = await login(
+          formData.email,
+          formData.password
+        );
+        if (!access_token) {
+          throw new Error("登录失败：未返回 access_token");
         }
+        onLogin(formData.email);
         alert("登录成功！");
       }
-      onClose(); // 成功后关闭弹窗
+      onClose();
     } catch (error) {
       console.error("请求失败：", error);
-      setErrorMessage(error.response?.data?.error || "请求失败，请稍后再试");
+      setErrorMessage(
+        error.response?.data?.error || error.message || "请求失败，请稍后再试"
+      );
     }
   };
 
-  // ✅【需要修改】发送验证码，真正调用接口
   const sendCode = async () => {
     if (!formData.email) {
       alert("请输入邮箱");
       return;
     }
-
     setSendingCode(true);
-    setErrorMessage(""); // 清空错误信息
-
+    setErrorMessage("");
     try {
-      // ✅【新增】真正调用发送验证码接口
       await sendVerificationCode(formData.email);
       alert("验证码已发送，请查收邮箱");
       setIsVerificationCodeSent(true);
     } catch (error) {
       console.error("发送验证码失败：", error);
-      setErrorMessage(error.response?.data?.error || "发送验证码失败，请稍后再试");
+      setErrorMessage(
+        error.response?.data?.error || "发送验证码失败，请稍后再试"
+      );
     } finally {
       setSendingCode(false);
     }
@@ -74,12 +79,10 @@ export default function AuthModal({ isOpen, onClose }) {
         <div className="auth-modal">
           <div className="auth-header">
             <h3>{isRegister ? "注册" : "登录"}</h3>
-            <button onClick={onClose} className="close-btn">
-              ×
-            </button>
+            <button onClick={onClose} className="close-btn">×</button>
           </div>
 
-          {errorMessage && <div className="error-message">{errorMessage}</div>} {/* 显示错误信息 */}
+          {errorMessage && <div className="error-message">{errorMessage}</div>}
 
           <form onSubmit={handleSubmit} className="auth-form">
             <div className="form-group">
@@ -87,7 +90,7 @@ export default function AuthModal({ isOpen, onClose }) {
               <input
                 type="email"
                 value={formData.email}
-                onChange={(e) =>
+                onChange={e =>
                   setFormData({ ...formData, email: e.target.value })
                 }
                 required
@@ -99,7 +102,7 @@ export default function AuthModal({ isOpen, onClose }) {
                 <button
                   type="button"
                   className="verification-code-btn"
-                  onClick={sendCode} // ✅【这里改了】原来是 sendVerificationCode，改成调用新函数 sendCode
+                  onClick={sendCode}
                   disabled={sendingCode}
                 >
                   {sendingCode ? "发送中..." : "发送验证码"}
@@ -114,7 +117,7 @@ export default function AuthModal({ isOpen, onClose }) {
                   <input
                     type="text"
                     value={formData.verificationCode}
-                    onChange={(e) =>
+                    onChange={e =>
                       setFormData({ ...formData, verificationCode: e.target.value })
                     }
                     required
@@ -125,7 +128,7 @@ export default function AuthModal({ isOpen, onClose }) {
                   <input
                     type="password"
                     value={formData.password}
-                    onChange={(e) =>
+                    onChange={e =>
                       setFormData({ ...formData, password: e.target.value })
                     }
                     required
@@ -136,7 +139,7 @@ export default function AuthModal({ isOpen, onClose }) {
                   <input
                     type="password"
                     value={formData.confirmPassword}
-                    onChange={(e) =>
+                    onChange={e =>
                       setFormData({ ...formData, confirmPassword: e.target.value })
                     }
                     required
@@ -151,7 +154,7 @@ export default function AuthModal({ isOpen, onClose }) {
                 <input
                   type="password"
                   value={formData.password}
-                  onChange={(e) =>
+                  onChange={e =>
                     setFormData({ ...formData, password: e.target.value })
                   }
                   required

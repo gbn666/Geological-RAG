@@ -1,28 +1,19 @@
 /*MainArea.css*/
-.header-intro {
+/* MainArea.css */
+.main-area {
+  flex: 1;                    /* 占满剩余高度 */
   width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
-}
+  max-width: 800px;           /* 设置最大宽度，并水平居中 */
+  margin: 0 auto;
 
-.intro-box {
   display: flex;
-  align-items: center;
-}
+  flex-direction: column;
 
-.rock-icon {
-  width: 100px;
-  height: 100px;
-  margin-right: 16px;
-}
+  align-items: center;        /* 水平居中 */
+  justify-content: center;    /* 纵向居中（当内容高度小于容器时） */
 
-.chat-input {
-  display: flex;
-  flex-direction: column; /* 垂直排列子元素 */
-  background-color: #f7f7f7;
-  border-radius: 8px;
-  padding: 12px;
-  gap: 16px; /* 增加按钮之间的间距 */
-  width: 800px; /* 设置宽度为800px，与截图一致 */
+  padding: 24px;
+  box-sizing: border-box;
+
+  overflow-y: auto;           /* 内容超出时，出现滚动条 */
 }

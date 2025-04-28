@@ -1,0 +1,32 @@
+/*src/components/AccountModal.css*/
+/* src/components/AccountModal.css */
+.account-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+  }
+  
+  .account-btn {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .account-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .logout-btn {
+    background-color: #f44336;
+  }
+  
+  .logout-btn:hover {
+    background-color: #d32f2f;
+  }
+  
