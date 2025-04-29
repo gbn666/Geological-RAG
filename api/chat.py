@@ -2,7 +2,7 @@
 import uuid, os
 import torch
 from flask import Blueprint, request, jsonify
-
+import app
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from app import db
 from models import Session, Image, Question
