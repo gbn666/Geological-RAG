@@ -29,6 +29,7 @@ class Config:
     # ---------- 文件上传 ----------
     UPLOAD_FOLDER = UPLOAD_FOLDER
 
+
     # ---------- 邮件 SMTP 配置（SMTPS） ----------
     MAIL_SERVER = os.getenv("MAIL_SERVER", "smtp.qq.com")
     MAIL_PORT = int(os.getenv("MAIL_PORT", 465))

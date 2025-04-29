@@ -45,6 +45,7 @@ def create_app():
     from api.auth import auth_bp
     from api.upload import upload_bp
     from api.chat import chat_bp
+    app.config['MAX_CONTENT_LENGTH'] = 5 * 1024 * 1024  # 限制 5MB
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(upload_bp)
