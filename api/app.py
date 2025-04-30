@@ -34,7 +34,7 @@ def create_app():
     # 跨域
     CORS(
         app,
-        resources={r"/api/*": {"origins": "http://172.20.65.4:3000"}},
+        resources={r"/api/*": {"origins": "172.20.100.33:3000"}},
         supports_credentials=False,
     )
 
