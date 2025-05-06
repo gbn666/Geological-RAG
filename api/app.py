@@ -22,7 +22,7 @@ def create_app():
     @app.after_request
     def add_cors_headers(response):
         if request.path.startswith("/api/"):
-            response.headers["Access-Control-Allow-Origin"] = "http://172.20.70.153:3000"
+            response.headers["Access-Control-Allow-Origin"] = "http://172.20.60.192:3000"
             response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
         return response
@@ -34,14 +34,18 @@ def create_app():
     # 跨域
     CORS(
         app,
-        resources={r"/api/*": {"origins": "172.20.70.153:3000"}},
+        resources={r"/api/*": {"origins": "*"}},
+    # 172.20.60.192:3000
         supports_credentials=False,
     )
 
     # 确保上传目录存在
     os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
+
     # 注册蓝图
+    from api.session_routes import session_bp
+    app.register_blueprint(session_bp)
     from api.auth import auth_bp
     from api.upload import upload_bp
     from api.chat import chat_bp
