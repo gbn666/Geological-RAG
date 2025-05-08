@@ -1,19 +1,87 @@
-/*MainArea.css*/
-/* MainArea.css */
-.main-area {
-  flex: 1;                    /* 占满剩余高度 */
+/*src/components/ MainArea.css 0508 */
+/* .header-intro {
   width: 100%;
-  max-width: 800px;           /* 设置最大宽度，并水平居中 */
-  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
 
+.intro-box {
+  display: flex;
+  align-items: center;
+}
+
+.rock-icon {
+  width: 100px;
+  height: 100px;
+  margin-right: 16px;
+}
+
+.chat-input {
+  display: flex;
+  flex-direction: column; /* 垂直排列子元素 
+  background-color: #f7f7f7;
+  border-radius: 8px;
+  padding: 12px;
+  gap: 16px; /* 增加按钮之间的间距 
+  width: 600px; /* 设置宽度为800px，与截图一致 
+} */
+
+
+
+/* src/components/MainArea.css */
+.main-area {
+  flex: 1;
   display: flex;
   flex-direction: column;
-
-  align-items: center;        /* 水平居中 */
-  justify-content: center;    /* 纵向居中（当内容高度小于容器时） */
-
-  padding: 24px;
+  background-color: #fff;
+  height: 100vh;
   box-sizing: border-box;
-
-  overflow-y: auto;           /* 内容超出时，出现滚动条 */
 }
+
+.main-area.centered {
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+
+.main-area.chatting {
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 24px;
+}
+
+.messages-container {
+  flex: 1;
+  width: 100%;
+  max-width: 600px;
+  overflow-y: auto;
+  margin: 16px 0;
+}
+
+.message-bubble {
+  margin-bottom: 12px;
+  max-width: 70%;
+  word-break: break-word;
+  padding: 8px;
+  border-radius: 12px;
+}
+
+.message-bubble.user {
+  background: #d1eaff;
+  align-self: flex-end;
+  border-radius: 12px 12px 0 12px;
+}
+
+.message-bubble.bot {
+  background: #ffffff;
+  align-self: flex-start;
+  border-radius: 12px 12px 12px 0;
+}
+
+.message-image {
+  max-width: 200px;
+  margin-bottom: 4px;
+  border-radius: 4px;
+}
+

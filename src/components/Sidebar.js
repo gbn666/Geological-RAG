@@ -1,5 +1,4 @@
-// src/components/Sidebar.js
-// src/components/Sidebar.js
+// src/components/Sidebar.js0508
 import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
 import closeSidebarIcon from "../assets/closeSidebar.svg";
@@ -9,7 +8,7 @@ import moreIcon from "../assets/moreIcon.svg";
 import AuthModal from "./AuthModal";
 import AccountModal from "./AccountModal";
 import ChangePasswordModal from "./ChangePasswordModal";
-import { getCurrentUser, logout as apiLogout } from "../api/api";
+import { getCurrentUser, logout as apiLogout } from "../api/auth";
 
 export default function Sidebar() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -112,3 +111,6 @@ export default function Sidebar() {
     </div>
   );
 }
+
+
+

@@ -1,19 +1,61 @@
-/*HeaderIntro.css*/
+ /* src/components/HeaderIntro.css */
+/* .header-intro {
+  width: 100%;
+  margin-bottom: 30px;
+}
+
+.intro-box {
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+}
+
+.rock-icon {
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+}
+
+.intro-text h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5em;
+}
+
+.intro-text p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+} */
+
+
+
+/* src/components/HeaderIntro.css */
 .header-intro {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
-  }
-  
-  .intro-box {
-    display: flex;
-    align-items: center;
-    max-width: 600px;
-  }
-  
-  .rock-icon {
-    width: 100px;
-    height: 100px;
-    margin-right: 16px;
-  }
+  width: 100%;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.intro-box {
+  display: flex;
+  align-items: center;
+  max-width: 600px;
+}
+
+.rock-icon {
+  width: 80px;
+  height: 80px;
+  margin-right: 16px;
+}
+
+.intro-text h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.5em;
+}
+
+.intro-text p {
+  margin: 0;
+  font-size: 0.9em;
+  color: #666;
+}

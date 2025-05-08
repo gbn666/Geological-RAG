@@ -1,0 +1,44 @@
+卷 Windows-SSD 的文件夹 PATH 列表
+卷序列号为 2467-66A4
+C:\USERS\10177\ROCK-APP\SRC
+│  App.css
+│  App.js
+│  App.test.js
+│  index.css
+│  index.js
+│  logo.svg
+│  reportWebVitals.js
+│  setupTests.js
+│  
+├─api
+│      api.js
+│      axiosConfig.js
+│      chat.js
+│      upload.js
+│      
+├─assets
+│      attachIcon.svg
+│      closeSidebar.svg
+│      moreIcon.svg
+│      newChat.svg
+│      openSidebar.svg
+│      rock-icon.png
+│      sendIcon.svg
+│      userIcon.svg
+│      
+└─components
+        AccountModal.css
+        AccountModal.js
+        AuthModal.css
+        AuthModal.js
+        ChangePasswordModal.css
+        ChangePasswordModal.js
+        ChatInput.css
+        ChatInput.js
+        HeaderIntro.css
+        HeaderIntro.js
+        MainArea.css
+        MainArea.js
+        Sidebar.css
+        Sidebar.js
+        

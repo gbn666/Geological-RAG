@@ -1,7 +1,7 @@
 //C:\Users\10177\rock-app\src\components\AuthModal.js
 import React, { useState } from "react";
 import "./AuthModal.css";
-import { login, register, sendVerificationCode } from "../api/api";
+import { login, register, sendVerificationCode } from "../api/auth";
 
 export default function AuthModal({ isOpen, onClose, onLogin }) {
   const [isRegister, setIsRegister] = useState(false);
