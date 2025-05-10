@@ -22,7 +22,7 @@ def create_app():
     @app.after_request
     def add_cors_headers(response):
         if request.path.startswith("/api/"):
-            response.headers["Access-Control-Allow-Origin"] = "http://172.20.60.192:3000"
+            response.headers["Access-Control-Allow-Origin"] = "http://172.20.0.79:3000"
             response.headers["Access-Control-Allow-Methods"] = "GET,POST,PUT,DELETE,OPTIONS"
             response.headers["Access-Control-Allow-Headers"] = "Content-Type,Authorization"
         return response
