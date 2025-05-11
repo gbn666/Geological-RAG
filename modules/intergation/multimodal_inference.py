@@ -83,7 +83,7 @@ def multimodal_inference(image_path, user_question):
 
 if __name__ == "__main__":
     # 示例调用：请替换 image_path 为实际图片路径，user_question 为用户的提问
-    image_path = "C:/Users/郭倍宁/Desktop/53876856790.jpg"
+    image_path = "F:/pycharm/RAG/api/uploads/47851f4424fe4462bd932c977f687cc9.jpg"
     user_question = "这块岩石的形成环境是怎样的？"
     result = multimodal_inference(image_path, user_question)
     print("最终问答结果：")
