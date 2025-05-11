@@ -1,4 +1,4 @@
-//C:\Users\10177\rock-app\src\components\AuthModal.js
+//C:\Users\10177\rock-app\src\components\AuthModal0511.js
 import React, { useState } from "react";
 import "./AuthModal.css";
 import { login, register, sendVerificationCode } from "../api/auth";

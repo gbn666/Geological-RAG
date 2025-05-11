@@ -1,0 +1,36 @@
+/* src/components/ChatHistory.css0511 */
+.chat-history {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  /* 去掉自己的滚动行为 */
+  overflow: visible;
+}
+
+.chat-message.user-msg {
+  align-self: flex-end;
+  background-color: #f5ebe1;
+  border-radius: 16px 16px 0 16px;
+  padding: 8px 12px;
+  max-width: 70%;
+}
+
+.chat-message.bot-msg {
+  align-self: flex-start;
+  background-color: #f7f7f7;
+  border-radius: 16px 16px 16px 0;
+  padding: 8px 12px;
+  max-width: 70%;
+}
+
+.message-text,
+.message-image {
+  display: block;
+}
+
+.message-image {
+  max-width: 100%;
+  border-radius: 12px;
+}
+
+

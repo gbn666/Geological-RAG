@@ -73,38 +73,35 @@
 //   if (image_path)  payload.image_path  = image_path;
 //   return http.post(`/session/${sessionId}/chat`, payload).then(res => res.data);
 // }
+
+
+// File: src/api/chat.js
 import http from "./axiosConfig";
 
 // 创建一个新的对话 Session，返回 session_id 给前端
 export function createSession() {
-  // 注意：后端 Blueprint 前缀是 /api/session
   return http
     .post("/session/new")
     .then(res => res.data.session_id);
 }
 
 // 发送文本或图片消息
-// 参数：
-//   sessionId — 会话 ID  
-//   options — 包含可选字段 question（文本）和 imageUrl（图片路径）
+// 接收 question（可选）和 imageUrl（可选）两个参数
 export function sendMessage(sessionId, { question, imageUrl }) {
+  // 只将存在的字段加到 payload
   const payload = {};
-  if (question) {
+  if (question != null && question !== "") {
     payload.question = question;
   }
   if (imageUrl) {
-    // 后端接收字段名是 image_url
     payload.image_url = imageUrl;
   }
 
-  return http.post(
-       `/session/${sessionId}/chat`,
-        payload,
-       { timeout: 60000 }      // 单独给聊天接口 60s 超时
-      )
-     .then(res => res.data);
+  return http
+    .post(`/session/${sessionId}/chat`, payload, { timeout: 120000 })
+    .then(res => res.data);
 }
- 
+
 
 
 

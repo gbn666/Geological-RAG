@@ -1,35 +1,4 @@
-/*src/components/ MainArea.css 0508 */
-/* .header-intro {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 24px;
-}
-
-.intro-box {
-  display: flex;
-  align-items: center;
-}
-
-.rock-icon {
-  width: 100px;
-  height: 100px;
-  margin-right: 16px;
-}
-
-.chat-input {
-  display: flex;
-  flex-direction: column; /* 垂直排列子元素 
-  background-color: #f7f7f7;
-  border-radius: 8px;
-  padding: 12px;
-  gap: 16px; /* 增加按钮之间的间距 
-  width: 600px; /* 设置宽度为800px，与截图一致 
-} */
-
-
-
-/* src/components/MainArea.css */
+/* src/components/MainArea.css 0511*/
 .main-area {
   flex: 1;
   display: flex;
@@ -51,37 +20,21 @@
   padding: 0 24px;
 }
 
-.messages-container {
+/* —— 外层滚动容器 —— */
+.messages-outer {
   flex: 1;
   width: 100%;
-  max-width: 600px;
+  /* 这里产生滚动条，位于最右侧 */
   overflow-y: auto;
-  margin: 16px 0;
+  /* 可选：滚动时平滑过渡 */
+  scroll-behavior: smooth;
 }
 
-.message-bubble {
-  margin-bottom: 12px;
-  max-width: 70%;
-  word-break: break-word;
-  padding: 8px;
-  border-radius: 12px;
+/* —— 内层居中、限制宽度 —— */
+.messages-inner {
+  /* 宽度不写或者写 100%，配合 max-width 生效 */
+  width: 100%;
+  max-width: 800px;     /* 你希望的最大宽度 */
+  margin: 0 auto;       /* 左右自动，内容居中 */
+  padding: 16px 0;      /* 可选：上下留白 */
 }
-
-.message-bubble.user {
-  background: #d1eaff;
-  align-self: flex-end;
-  border-radius: 12px 12px 0 12px;
-}
-
-.message-bubble.bot {
-  background: #ffffff;
-  align-self: flex-start;
-  border-radius: 12px 12px 12px 0;
-}
-
-.message-image {
-  max-width: 200px;
-  margin-bottom: 4px;
-  border-radius: 4px;
-}
-

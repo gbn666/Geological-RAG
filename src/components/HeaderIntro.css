@@ -1,40 +1,22 @@
- /* src/components/HeaderIntro.css */
-/* .header-intro {
-  width: 100%;
-  margin-bottom: 30px;
-}
-
-.intro-box {
-  display: flex;
-  align-items: center;
-  max-width: 600px;
-}
-
-.rock-icon {
-  width: 80px;
-  height: 80px;
-  margin-right: 16px;
-}
-
-.intro-text h2 {
-  margin: 0 0 8px 0;
-  font-size: 1.5em;
-}
-
-.intro-text p {
-  margin: 0;
-  font-size: 0.9em;
-  color: #666;
-} */
-
-
-
-/* src/components/HeaderIntro.css */
+/* src/components/HeaderIntro.css0511 */
+/* 修改 header-intro 使用 sticky 定位 */
 .header-intro {
   width: 100%;
+  margin-top: 0; /* 取消顶端间距 */
+  padding-top: 0; /* 取消顶端内边距 */
   margin-bottom: 30px;
   display: flex;
   justify-content: center;
+  transition: all 0.3s ease;
+  background: #fff;
+  z-index: 100;
+  position: sticky;  /* 使用 sticky */
+  top: 0;            /* 使其粘贴在顶部 */
+}
+
+/* header-intro fixed 样式无需再保留 */
+.header-intro.fixed {
+  /* 移除 fixed 定义 */
 }
 
 .intro-box {
