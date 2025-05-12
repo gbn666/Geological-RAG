@@ -27,7 +27,6 @@ chat_bp = Blueprint("chat", __name__, url_prefix="/api/session")
 ALLOWED_EXTENSIONS = {'.png', '.jpg', '.jpeg', '.bmp'}
 MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
 
-
 def allowed_file(filename):
     return os.path.splitext(filename)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -53,23 +52,20 @@ def chat(session_id):
         if not sess:
             return jsonify({"error": "Session not found or expired."}), 404
 
-        # 2. Parse inputs
-        question = None
-        image_url = None
-        uploaded_file = None
-        content_type = request.content_type or ''
-
-        if content_type.startswith('multipart/'):
+        # 2. Parse inputs: handle multipart first
+        uploaded_file = request.files.get('file')
+        if uploaded_file:
             question = request.form.get('question', '').strip() or None
-            files = list(request.files.values())
-            if files:
-                uploaded_file = files[0]
         else:
             data = request.get_json(silent=True) or {}
             question = (data.get('question') or '').strip() or None
-            image_url = data.get('image_url') or data.get('imageUrl') or data.get('image_path')
 
-        # 3. Handle file upload
+        image_url = None
+        img_path = None
+
+        current_app.logger.info(f"[DEBUG] chat(): question={question!r}, uploaded_file={bool(uploaded_file)}")
+
+        # 3. Handle upload if file provided
         if uploaded_file:
             valid, err = validate_upload(uploaded_file)
             if not valid:
@@ -77,13 +73,19 @@ def chat(session_id):
             filename = f"{uuid.uuid4().hex}_{secure_filename(uploaded_file.filename)}"
             save_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
             uploaded_file.save(save_path)
-            image_url = os.path.join(current_app.config['UPLOAD_URL_PATH'], filename)
+            # record upload
             db.session.add(Image(user_id=user_id, session_id=sess.id, image_path=save_path))
             db.session.commit()
+            img_path = save_path
+            image_url = os.path.join(current_app.config['UPLOAD_URL_PATH'], filename)
+        else:
+            # if no file, try JSON image_url
+            data = data if uploaded_file else (request.get_json(silent=True) or {})
+            image_url = data.get('image_url') or data.get('imageUrl') or data.get('image_path')
 
         # 4. Require at least text or image
-        if not (uploaded_file or image_url or question):
-            return jsonify({"error": "请提供文本(question)或上传图片。"}), 422
+        if not (question or img_path or image_url):
+            return jsonify({"error": "请提供文本(question)或图片。"}), 422
 
         # 5. Load classes and device
         _, _, classes = get_dataloaders(
@@ -92,25 +94,32 @@ def chat(session_id):
         )
         device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-        # 6. Image classification Top-K
+        # 6. Image classification
         candidates = []
-        if image_url:
-            img_name = os.path.basename(image_url)
-            img_path = os.path.join(current_app.config['UPLOAD_FOLDER'], img_name)
-            if not os.path.isfile(img_path):
-                return jsonify({"error": "图片不存在。", "path": img_path}), 400
-            # Load and classify
-            model = load_img_model().to(device)
-            model.load_state_dict(torch.load(
-                current_app.config['IMG_MODEL_PATH'], map_location=device
-            ))
-            preds = image_classification_module(img_path, model, classes, device, topk=3)
-            for name, prob in preds:
+        raw_preds = []
+        if img_path or image_url:
+            if not img_path and image_url:
+                name = os.path.basename(image_url)
+                img_path = os.path.join(current_app.config['UPLOAD_FOLDER'], name)
+            if os.path.isfile(img_path):
                 try:
-                    kg_info = query_knowledge_graph(name)
-                except Exception:
-                    kg_info = None
-                candidates.append((name, prob, kg_info))
+                    model = load_img_model().to(device)
+                    model.load_state_dict(torch.load(
+                        current_app.config['IMG_MODEL_PATH'], map_location=device
+                    ))
+                    preds = image_classification_module(img_path, model, classes, device, topk=3)
+                    raw_preds = preds
+                    current_app.logger.info(f"[DEBUG] chat(): raw_preds={preds}")
+                    for name, prob in preds:
+                        try:
+                            kg_info = query_knowledge_graph(name)
+                        except:
+                            kg_info = None
+                        candidates.append((name, prob, kg_info))
+                except Exception as e:
+                    current_app.logger.error(f"[ERROR] chat(): classification failed: {e}")
+            else:
+                current_app.logger.warning(f"[WARNING] chat(): image file not found: {img_path}")
 
         # 7. Text-only fallback
         if not candidates and question:
@@ -118,72 +127,64 @@ def chat(session_id):
                 if cname.lower() in question.lower():
                     try:
                         kg_info = query_knowledge_graph(cname)
-                    except Exception:
+                    except:
                         kg_info = None
                     candidates.append((cname, 1.0, kg_info))
 
-        # 8. Text feature summary
+        # 8. Text features
         text_summary = ''
         if question:
             text_model, text_tokenizer = load_text_model(device)
-            feats = extract_text_features(
-                question, text_model, text_tokenizer, max_length=128, device=device
-            )
+            feats = extract_text_features(question, text_model, text_tokenizer, max_length=128, device=device)
             text_summary = f"维度: {tuple(feats.shape)}, 均值: {feats.mean().item():.4f}, 标准差: {feats.std().item():.4f}"
 
-        # 9. Construct prompt (保留平台描述，要求输出隐藏)
+        # 9. Construct prompt
         prompt_lines = [
-            # 保留完整的平台描述
             "系统：你是地质与矿物学专家。",
             ("本平台“岩识”致力于为用户提供高效、精准的多模态矿物鉴定与咨询服务，"
              "同时为地质学家、学生和爱好者提供一个可上传岩石/矿物图片并提出自然语言问题的智能问答系统。"),
-
-            # 候选信息
-            "候选矿物信息（图像识别＋知识图谱）：",
+            "纯图像分类结果（仅类别+置信度）：",
         ]
+        if raw_preds:
+            for name, prob in raw_preds:
+                prompt_lines.append(f"- {name}：{prob:.2f}")
+        else:
+            prompt_lines.append("- 无（未检测到图像或分类失败）")
+        prompt_lines.append("候选矿物信息（图像识别＋知识图谱）：")
         if candidates:
             for name, prob, kg in candidates:
                 info = kg or '无知识图谱信息'
                 prompt_lines.append(f"- {name}，置信度 {prob:.0%}，详情：{info}")
         else:
             prompt_lines.append("（无候选信息，请确保图片清晰或补充文字描述）")
-
-        # 用户提问
         if question:
             prompt_lines.append("用户提问：")
             prompt_lines.append(question)
-
+        elif img_path:
+            prompt_lines.append("用户未提供文本，仅上传图片，请仅根据图像信息给出专业判断。")
         if text_summary:
             prompt_lines.append("文本特征摘要：")
             prompt_lines.append(text_summary)
-
-        # 新增格式化和隐藏系统描述指令
         prompt_lines.append(
+            "请在最终回答中使用有趣有准确科学的语言描述，可以加入一些表情符号，"
             "仅给出对用户问题的专业判断和详细解释，"
             "并使用清晰的缩进和换行来组织你的答案。"
         )
-
         prompt = "\n".join(prompt_lines)
 
         # 10. LLM inference
         answer = llm_inference(prompt)
 
-        # 11. Persist context and QA
+        # 11. Persist
         sess.context = (sess.context or '') + '\n' + prompt + f"\n回答：{answer}"
-        db.session.add(Question(
-            session_id=sess.id,
-            user_question=question or '',
-            answer=answer
-        ))
+        db.session.add(Question(session_id=sess.id, user_question=question or '', answer=answer))
         db.session.commit()
 
-        # 12. Return response
+        # 12. Response
         return jsonify({
             "answer": answer,
-            "kg_candidates": [
-                {"name": n, "prob": p, "kg_info": k}
-                for n, p, k in candidates
-            ]
+            "kg_candidates": [{"name": n, "prob": p, "kg_info": k} for n, p, k in candidates],
+            "raw_preds": [{"name": n, "prob": p} for n, p in raw_preds]
         })
     except Exception:
         current_app.logger.error(traceback.format_exc())
