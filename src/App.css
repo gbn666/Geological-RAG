@@ -1,38 +1,4 @@
-/*APP.CSS*/
-/* .app-container {
-  display: flex;
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: sans-serif;
-}
-
-/* 侧边栏样式 
-.sidebar-container {
-  width: 240px;
-  height: 100vh;
-  background-color: #fef9f4; /* 根据你的原型图颜色 
-  display: flex;
-  flex-direction: column;
-  padding: 16px;
-  box-sizing: border-box;
-}
-
-/* 主区域样式 
-.main-area {
-  flex: 1;
-  background-color: #fff;
-  height: 100vh;
-  box-sizing: border-box;
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* 垂直居中 
-  align-items: center; /* 水平居中 
-  padding: 24px;
-} */
-/* APP.CSS */
-/* APP.CSS */
+/* APP.CSS0511 */
 .app-container {
   display: flex;
   height: 100vh;

@@ -1,20 +1,4 @@
-// src/api/axiosConfig.js
-// src/api/axiosConfig.js
-// import axios from 'axios';
-
-// const axiosInstance = axios.create({
-//   baseURL: process.env.REACT_APP_API_BASE_URL || '/api',
-// });
-
-// axiosInstance.interceptors.request.use(config => {
-//   const token = localStorage.getItem('access_token');
-//   if (token) config.headers.Authorization = `Bearer ${token}`;
-//   return config;
-// });
-
-
-
-// File: src/api/axiosConfig.js
+// File: src/api/axiosConfig.js0511
 // -------------------------
 import axios from "axios";
 

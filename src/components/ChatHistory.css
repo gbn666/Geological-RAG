@@ -33,4 +33,39 @@
   border-radius: 12px;
 }
 
+.bot-markdown {
+  background-color: #f5f5f5;
+  padding: 12px;
+  border-radius: 10px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  font-size: 15px;
+}
+
+.bot-markdown h1,
+.bot-markdown h2,
+.bot-markdown h3 {
+  font-weight: bold;
+  margin-top: 12px;
+  margin-bottom: 6px;
+}
+
+.bot-markdown ul,
+.bot-markdown ol {
+  padding-left: 20px;
+}
+
+.bot-markdown code {
+  background-color: #eee;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-family: monospace;
+}
+
+.bot-markdown pre {
+  background-color: #f0f0f0;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+}
 

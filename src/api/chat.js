@@ -1,107 +1,225 @@
-// src/api/chat.js
-// src/api/chat.js
-// import axios from "axios";
+// // // File: src/api/chat0511.js
+// // import http from "./axiosConfig";
 
-// const API_BASE = process.env.REACT_APP_API_BASE_URL || "http://172.20.97.54:5000/api";
+// // // 创建一个新的对话 Session，返回 session_id 给前端
+// // export function createSession() {
+// //   return http
+// //     .post("/session/new")
+// //     .then(res => res.data.session_id);
+// // }
 
-// /**
-//  * 创建新会话
-//  * @returns {Promise<{ session_id: string }>}
-//  */
-// export function createSession() {
-//   const token = localStorage.getItem("access_token");
-//   return axios.post(`${API_BASE}/session/new`, {}, {
-//     headers: {
-//       ...(token ? { Authorization: `Bearer ${token}` } : {}),
-//     },
-//   });
-// }
+// // // 发送文本或图片消息
+// // // 接收 question（可选）和 imageUrl（可选）两个参数
+// // export function sendMessage(sessionId, { question, imageUrl }) {
+// //   // 只将存在的字段加到 payload
+// //   const payload = {};
+// //   if (question != null && question !== "") {
+// //     payload.question = question;
+// //   }
+// //   if (imageUrl) {
+// //     payload.image_url = imageUrl;
+// //   }
 
-// /**
-//  * 发送消息（图文）
-//  * @param {string} sessionId
-//  * @param {{ text?: string, imageUrl?: string }} payload
-//  * @returns {Promise<{ answer: string, kg_candidates: Array }>}
-//  */
-// export function sendMessage(sessionId, payload) {
-//   const token = localStorage.getItem("access_token");
-//   return axios.post(`${API_BASE}/session/${sessionId}/chat`, {
-//     question: payload.text || "",
-//     image_path: payload.imageUrl || null,
-//   }, {
-//     headers: {
-//       "Content-Type": "application/json",
-//       ...(token ? { Authorization: `Bearer ${token}` } : {}),
-//     },
-//   });
-// }
+// //   return http
+// //     .post(`/session/${sessionId}/chat`, payload, { timeout: 120000 })
+// //     .then(res => res.data);
+// // }
 
 
-// src/api/chat.js
-// src/api/chat.js
-// import axios from "./axiosConfig";
-
-// /** 新建会话 → POST /api/chat/new */
-// export const newSession = () => {
-//   return axios.post("/session/new");//！注意是后端路径
-// };
-
-// /**
-//  * 发送消息 → POST /api/chat/{sessionId}/chat
-//  * @param {string} sessionId
-//  * @param {{ text?: string, imageUrl?: string }} opts
-//  */
-// export const sendMessage = (sessionId, { text, imageUrl }) => {
-//   const payload = {};
-//   if (text)     payload.question   = text;
-//   if (imageUrl) payload.image_path = imageUrl;
-//   return axios.post(`/session/${sessionId}/chat`, payload);//！注意是后端路径
-// };
 
 
-// File: src/api/chat.js
-// -------------------------
+
+// // File: src/api/chat.js
+
 // import http from "./axiosConfig";
 
+// /**
+//  * 创建一个新的对话 Session
+//  * @returns {Promise<string>} 返回新创建的 session_id
+//  */
 // export function createSession() {
-//   return http.post("/session/new").then(res => res.data.session_id);
+//   return http
+//     .post("/session/new")
+//     .then(res => res.data.session_id);
 // }
 
-// export function sendMessage(sessionId, { question, image_path }) {
+// /**
+//  * 获取当前用户的所有会话列表
+//  * @returns {Promise<Array<{session_id: string, created_at: string}>>}
+//  */
+// export function listSessions() {
+//   return http
+//     .get("/session/list")
+//     .then(res => res.data.sessions);
+// }
+
+// /**
+//  * 获取指定会话的完整历史消息
+//  * @param {string} sessionId 会话 ID
+//  * @returns {Promise<Array<{sender: string, type: string, content: string}>>}
+//  */
+// export function getSessionHistory(sessionId) {
+//   return http
+//     .get(`/session/${sessionId}/chat`)
+//     .then(res => res.data);
+// }
+
+// /**
+//  * 发送文本或图片消息到指定会话
+//  * @param {string} sessionId 会话 ID
+//  * @param {{question?: string, imageUrl?: string}} options
+//  *        question - 文本消息（可选）
+//  *        imageUrl - 图片 URL（可选）
+//  * @returns {Promise<{answer: string}>} 后端返回的数据（例如机器人的回答）
+//  */
+// export function sendMessage(sessionId, { question, imageUrl }) {
+//   // 构造请求 payload，只包含非空字段
 //   const payload = {};
-//   if (question)    payload.question    = question;
-//   if (image_path)  payload.image_path  = image_path;
-//   return http.post(`/session/${sessionId}/chat`, payload).then(res => res.data);
+//   if (question != null && question !== "") {
+//     payload.question = question;
+//   }
+//   if (imageUrl) {
+//     payload.image_url = imageUrl;
+//   }
+
+//   return http
+//     .post(`/session/${sessionId}/chat`, payload, { timeout: 120000 })
+//     .then(res => res.data);
+// }
+
+
+
+
+// // File: src/api/chat.js
+// import http from "./axiosConfig";
+
+// // 创建一个新的对话 Session，返回 session_id
+// export function createSession() {
+//   return http
+//     .post("/session/new")
+//     .then(res => res.data.session_id);
+// }
+
+// // 获取当前用户所有会话列表
+// export function listSessions() {
+//   return http
+//     .get("/session/list")
+//     .then(res => res.data.sessions);
+// }
+
+// // 获取指定会话的历史消息
+// export function getSessionHistory(sessionId) {
+//   return http
+//     .get(`/session/${sessionId}/chat`)
+//     .then(res => res.data);
+// }
+
+// // 发送文本或图片消息
+// export function sendMessage(sessionId, { question, imageUrl }) {
+//   const payload = {};
+//   if (question != null && question !== "") {
+//     payload.question = question;
+//   }
+//   if (imageUrl) {
+//     payload.image_url = imageUrl;
+//   }
+//   return http
+//     .post(`/session/${sessionId}/chat`, payload, { timeout: 120000 })
+//     .then(res => res.data);
+// }
+
+// File: src/api/chat.js
+// import http from "./axiosConfig";
+
+// /**
+//  * 创建一个新的对话 Session，返回 session_id
+//  */
+// export function createSession() {
+//   return http
+//     .post("/session/new")
+//     .then(res => res.data.session_id);
+// }
+
+// /**
+//  * 获取当前用户所有会话列表
+//  */
+// export function listSessions() {
+//   return http
+//     .get("/session/list")
+//     .then(res => res.data.sessions);
+// }
+
+// /**
+//  * 获取指定会话的历史消息
+//  * （调用后端新增的 /api/session/messages?session_id=... 接口）
+//  */
+// export function getSessionHistory(sessionId) {
+//   return http
+//     .get("/session/messages", {
+//       params: { session_id: sessionId }
+//     })
+//     .then(res => res.data.messages);
+// }
+
+// /**
+//  * 发送文本或图片消息
+//  * （调用后端的 /api/chat/send 接口，将 session_id、question、imageUrl 一起提交）
+//  */
+// export function sendMessage(sessionId, { question, imageUrl }) {
+//   const payload = { session_id: sessionId };
+//   if (question != null && question !== "") {
+//     payload.question = question;
+//   }
+//   if (imageUrl) {
+//     payload.imageUrl = imageUrl;
+//   }
+//   return http
+//     .post("/chat/send", payload, { timeout: 120000 })
+//     .then(res => res.data);
 // }
 
 
 // File: src/api/chat.js
 import http from "./axiosConfig";
 
-// 创建一个新的对话 Session，返回 session_id 给前端
+/**
+ * 创建一个新的对话 Session，返回 session_id
+ */
 export function createSession() {
   return http
     .post("/session/new")
     .then(res => res.data.session_id);
 }
 
-// 发送文本或图片消息
-// 接收 question（可选）和 imageUrl（可选）两个参数
-export function sendMessage(sessionId, { question, imageUrl }) {
-  // 只将存在的字段加到 payload
-  const payload = {};
-  if (question != null && question !== "") {
-    payload.question = question;
-  }
-  if (imageUrl) {
-    payload.image_url = imageUrl;
-  }
-
+/**
+ * 列出所有会话
+ */
+export function listSessions() {
   return http
-    .post(`/session/${sessionId}/chat`, payload, { timeout: 120000 })
-    .then(res => res.data);
+    .get("/session/list")
+    .then(res => res.data.sessions);
 }
 
+/**
+ * 获取指定会话的历史消息
+ */
+export function getSessionHistory(sessionId) {
+  return http
+    .get("/session/messages", { params: { session_id: sessionId } })
+    .then(res => res.data.messages);
+}
 
+/**
+ * 发送文本或图片消息（使用 JSON 请求，而非 multipart）
+ */
+export function sendMessage(sessionId, { question, imageUrl }) {
+  const payload = {
+    question: question || null,
+    imageUrl: imageUrl || null,
+  };
 
-
+   return http.post(`/session/${sessionId}/chat`, payload, {
+    headers: { "Content-Type": "application/json" },
+    timeout: 180000  // 180秒
+  }).then(res => res.data);
+}

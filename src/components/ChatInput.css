@@ -1,13 +1,17 @@
 /* src/components/ChatInput.css0511 */
 .chat-input-container {
+  background-color: #f5f5f5;  /* 浅灰色背景 */
   width: 100%;
   max-width: 800px;
+  border-radius: 12px;         /* 圆角，数值可根据需求调整 */
+  padding: 0.5rem;            /* 可选：给容器加点内边距 */
 }
 
 
 
+
 .chat-input {
-  background-color: #f7f7f7;
+  background-color: #f5f5f5;  /* 浅灰色背景 */
   border-radius: 30px;
   padding: 12px;
   display: flex;
@@ -19,12 +23,12 @@
   resize: none;
   border: none;
   outline: none;
-  background-color: transparent;
+  background-color: #f5f5f5;  /* 浅灰色背景 */
   font-size: 14px;
   min-height: 60px;
   padding: 8px;
   border-radius: 20px;
-  width: 100%;
+  width: 80%;
 }
 
 .preview-container {
@@ -55,6 +59,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  background-color: #f5f5f5;  /* 浅灰色背景 */
 }
 
 .attach-btn,

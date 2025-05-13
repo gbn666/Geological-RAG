@@ -1,4 +1,4 @@
-/* src/components/Sidebar.css0511 */
+/* src/components/Sidebar.css0511*/
 
 .sidebar-container {
   width: 240px;
@@ -95,4 +95,36 @@
   height: 16px;
   margin-left: 8px;
   cursor: pointer;
+} 
+
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;               /* 占据剩余空间 */
+  overflow-y: auto;      /* 超出时滚动 */
 }
+
+.session-item {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+.session-item:hover,
+.session-item.active {
+  background-color: #f0f0f0;
+}
+
+.session-title {
+  font-size: 0.9rem;
+}
+
+/* .session-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+}
+.session-item.active {
+  background-color: #f0f0f0;
+  font-weight: bold;
+} */
