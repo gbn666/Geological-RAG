@@ -1,7 +1,7 @@
 from neo4j import GraphDatabase
 
 # 修改以下连接参数为你实际的 Neo4j 连接信息
-NEO4J_URI = "bolt://172.20.65.155:7687"
+NEO4J_URI = "bolt://172.20.3.117:7687"
 NEO4J_USERNAME = "neo4j"
 NEO4J_PASSWORD = "neo4jneo4j"  # 请修改为你的 Neo4j 密码
 
